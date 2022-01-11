@@ -102,7 +102,7 @@ function calculate_and_display() {
     upper_leg_len = parseFloat(document.getElementById('upper_leg_len').value)
     trunk_len = parseFloat(document.getElementById('trunklen').value)
     arm_len = parseFloat(document.getElementById('armlen').value)
-    shoulders_neck_head_len = parseFloat(trunk_len * .258503 / .190476)
+    shoulders_neck_head_len = parseFloat(trunk_len * .190476 /.258503 )
 
 
   }
