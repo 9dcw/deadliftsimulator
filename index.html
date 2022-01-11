@@ -15,7 +15,7 @@
     <body>
         <div class="d-flex" id="wrapper">
             <!-- Sidebar-->
-            <div class="border-end bg-white" id="sidebar-wrapper">
+            <!--div class="border-end bg-white" id="sidebar-wrapper">
                 <div class="sidebar-heading border-bottom bg-light">Deadlift Form Simulator</div>
                 <div class="list-group list-group-flush">
                   <div class="list-group-item list-group-item-action list-group-item-light p-3">
@@ -28,7 +28,7 @@
 
                 </div>
                 </div>
-            </div>
+            </div-->
             <!-- Page content wrapper-->
             <div id="page-content-wrapper">
                 <!-- Top navigation-->
@@ -64,8 +64,12 @@
                         <code>#sidebarToggle</code>
                         ID which will toggle the menu when clicked.
                     </p-->
+                    <label for="shoesize">What is your american shoe size?</label>
+                    <input type="number" id="shoesize" name="shoesize" min="1" max="30" value="12" onchange="calculate_and_display()">
+                    <label for="height">How Tall Are you in inches?</label>
+                    <input type="number" id="height" name="height" min="1" max="150" value="73.5"  onchange="calculate_and_display()">
 
-                    <div class="h-100 p-3" id="data_display"></div>
+                    <div class="h-50 p-3" id="data_display"></div>
                 </div>
             </div>
         </div>
