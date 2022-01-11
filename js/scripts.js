@@ -156,7 +156,7 @@ function calculate_and_display() {
   shoulders_neck_head_y2 = Math.sin(shoulders_neck_head_angle) * shoulders_neck_head_len + shoulders_neck_head_y1
   shoulders_neck_head_x2 = Math.cos(shoulders_neck_head_angle) * shoulders_neck_head_len + shoulders_neck_head_x1
 
-  max_height = shoulders_neck_head_y2
+  max_height = shoulders_neck_head_y2 + 5
 
   two_el = setup_two('data_display')
   //draw_base(two_el)
