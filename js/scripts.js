@@ -100,6 +100,7 @@ function calculate_and_display() {
   let upper_leg_y1 = lower_leg_y2
   let upper_leg_x1 = lower_leg_x2
 
+
   let intersection_coords = get_intersections(trunk_x2, trunk_y2, trunk_len,
                                               upper_leg_x1, upper_leg_y1, upper_leg_len)
 
@@ -109,17 +110,59 @@ function calculate_and_display() {
   printout('intersection ' + upper_leg_x2.toString() + ' ' + upper_leg_y2.toString())
 
   let trunk_y1 = upper_leg_y2
-  let trunk_x1 = upper_leg_x1
+  let trunk_x1 = upper_leg_x2
+
+  let asinarg = (trunk_y2-trunk_y1 ) / trunk_len
+  let shoulders_neck_head_angle = Math.asin(asinarg)
+  shoulders_neck_head_y1 = trunk_y2
+  shoulders_neck_head_x1 = trunk_x2
+  shoulders_neck_head_y2 = Math.sin(shoulders_neck_head_angle) * shoulders_neck_head_len + shoulders_neck_head_y1
+  shoulders_neck_head_x2 = Math.cos(shoulders_neck_head_angle) * shoulders_neck_head_len + shoulders_neck_head_x1
+
+
   two_el = setup_two('data_display')
   //draw_base(two_el)
+  draw_line(lower_leg_x1,lower_leg_y1,lower_leg_x2,lower_leg_y2, two_el)
   draw_line(upper_leg_x1,upper_leg_y1,upper_leg_x2,upper_leg_y2, two_el)
+  draw_line(trunk_x1,trunk_y1,trunk_x2,trunk_y2, two_el)
+  draw_line(arm_x1,arm_y1,arm_x2,arm_y2, two_el)
+  draw_line(shoulders_neck_head_x1,shoulders_neck_head_y1,shoulders_neck_head_x2,shoulders_neck_head_y2, two_el)
+  draw_circle(barbell_x, barbell_y, barbell_diameter, two_el)
 
 }
 
+function convert_y(inches, two) {
+
+  canvas_y = two.height - inches * two.height / 90
+  return canvas_y
+}
+
+function convert_x(inches, two) {
+
+  canvas_x = (inches + 45) * two.height / 90 + (two.width - two.height)/2
+  return canvas_x
+}
+
+
+function draw_circle(x_in,y_in,d_in, two) {
+
+  x = convert_x(x_in)
+  y = convert_y(y_in)
+  d = convert_y(d_in)
+  var circle = two.makeCircle(x, y, d/2)
+  circle.fill = '#FF8000'
+  two.update();
+}
+
 function draw_line(x0,y0,x1,y1, two) {
-  line = two.makeLine(x0, y0, x1, y1)
-  printout(x0.toString() + ' ' + y0.toString() + ' '+
-            x1.toString() + ' ' + y1.toString())
+
+  line = two.makeLine(convert_x(x0, two),
+                      convert_y(y0, two),
+                      convert_x(x1, two),
+                      convert_y(y1, two))
+
+  //printout('x1 ' +convert_x(x0, two).toString() + ' y1 ' + convert_y(y0, two).toString() + ' x2 '+
+  //          convert_x(x1, two).toString() + ' y2 ' + convert_y(y1, two).toString())
   line.stroke = 'orangered'
   two.update();
 }
