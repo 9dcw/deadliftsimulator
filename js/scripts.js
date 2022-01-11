@@ -125,6 +125,7 @@ function calculate_and_display() {
   draw_line(trunk_x1,trunk_y1,trunk_x2,trunk_y2, two_el)
   draw_line(arm_x1,arm_y1,arm_x2,arm_y2, two_el)
   draw_line(shoulders_neck_head_x1,shoulders_neck_head_y1,shoulders_neck_head_x2,shoulders_neck_head_y2, two_el)
+  draw_line(foot_x1,foot_y1,foot_x2,foot_y2, two_el)
 
   draw_circle(barbell_x, barbell_y, barbell_diameter, two_el)
 
