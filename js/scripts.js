@@ -8,7 +8,7 @@
 //
 
 window.addEventListener('DOMContentLoaded', event => {
-
+    calculate_and_display()
     // Toggle the side navigation
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
     if (sidebarToggle) {
@@ -25,6 +25,7 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
+var max_height;
 
 function printout(text) {
   let el = document.createElement('p')
@@ -61,13 +62,9 @@ function calculate_and_display() {
     printout('no height data!')
     return
   }
-
-
-  printout('shoe size = ' + full_foot_len.toString())
+  max_height = height
   let midfoot_point = .5 * full_foot_len
   let front_foot_size = full_foot_len * 2/3
-
-  printout('barbell weight = ' + barbell_weight.toString())
 
   let barbell_x = midfoot_point - (full_foot_len - front_foot_size)
   let leg_angle = Math.atan(barbell_y / (barbell_x-1)) / Math.PI * 180
@@ -107,7 +104,6 @@ function calculate_and_display() {
   console.log(intersection_coords)
   let upper_leg_x2 = intersection_coords[0]
   let upper_leg_y2 = intersection_coords[1]
-  printout('intersection ' + upper_leg_x2.toString() + ' ' + upper_leg_y2.toString())
 
   let trunk_y1 = upper_leg_y2
   let trunk_x1 = upper_leg_x2
@@ -119,36 +115,43 @@ function calculate_and_display() {
   shoulders_neck_head_y2 = Math.sin(shoulders_neck_head_angle) * shoulders_neck_head_len + shoulders_neck_head_y1
   shoulders_neck_head_x2 = Math.cos(shoulders_neck_head_angle) * shoulders_neck_head_len + shoulders_neck_head_x1
 
+  max_height = shoulders_neck_head_y2
 
   two_el = setup_two('data_display')
   //draw_base(two_el)
+  console.log('cie')
   draw_line(lower_leg_x1,lower_leg_y1,lower_leg_x2,lower_leg_y2, two_el)
   draw_line(upper_leg_x1,upper_leg_y1,upper_leg_x2,upper_leg_y2, two_el)
   draw_line(trunk_x1,trunk_y1,trunk_x2,trunk_y2, two_el)
   draw_line(arm_x1,arm_y1,arm_x2,arm_y2, two_el)
   draw_line(shoulders_neck_head_x1,shoulders_neck_head_y1,shoulders_neck_head_x2,shoulders_neck_head_y2, two_el)
+
   draw_circle(barbell_x, barbell_y, barbell_diameter, two_el)
 
 }
 
 function convert_y(inches, two) {
 
-  canvas_y = two.height - inches * two.height / 90
+  canvas_y = (two.height - inches * two.height / max_height)
   return canvas_y
 }
 
 function convert_x(inches, two) {
 
-  canvas_x = (inches + 45) * two.height / 90 + (two.width - two.height)/2
+  canvas_x = (inches + max_height/2) * two.height / max_height + (two.width - two.height)/2
   return canvas_x
 }
 
+function convert_diamater(inches, two) {
+  d=inches / max_height * two.height
+  return d
+}
 
 function draw_circle(x_in,y_in,d_in, two) {
 
-  x = convert_x(x_in)
-  y = convert_y(y_in)
-  d = convert_y(d_in)
+  x = convert_x(x_in, two)
+  y = convert_y(y_in, two)
+  d = convert_diamater(d_in, two)
   var circle = two.makeCircle(x, y, d/2)
   circle.fill = '#FF8000'
   two.update();
@@ -169,7 +172,8 @@ function draw_line(x0,y0,x1,y1, two) {
 
 function setup_two (parentEL){
   var params = {
-  fitted: true
+    //fullscreen: true
+    fitted: true
   };
 
   var elem = document.getElementById(parentEL)
