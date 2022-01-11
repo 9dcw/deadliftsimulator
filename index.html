@@ -32,10 +32,10 @@
             <!-- Page content wrapper-->
             <div id="page-content-wrapper">
                 <!-- Top navigation-->
-                <!--nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
                     <div class="container-fluid">
-                        <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                        <button class="btn btn-primary" id="dataToggle" onclick="data_toggle()">Enter Limb Lengths</button>
+                        <!--button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                                 <li class="nav-item active"><a class="nav-link" href="#!">Home</a></li>
@@ -50,12 +50,13 @@
                                     </div>
                                 </li>
                             </ul>
-                        </div>
+                        </div-->
                     </div>
-                </nav-->
+                </nav>
                 <!-- Page content-->
                 <div class="container-fluid h-100 p-3">
                     <h1 class="mt-4">Your Ideal Deadlift Starting Position</h1>
+
                     <!--p>The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will change.</p>
                     <p>
                         Make sure to keep all page content within the
@@ -64,12 +65,32 @@
                         <code>#sidebarToggle</code>
                         ID which will toggle the menu when clicked.
                     </p-->
-                    <label for="shoesize">What is your american shoe size?</label>
-                    <input type="number" id="shoesize" name="shoesize" min="1" max="30" value="12" onchange="calculate_and_display()">
-                    <label for="height">How Tall Are you in inches?</label>
-                    <input type="number" id="height" name="height" min="1" max="150" value="73.5"  onchange="calculate_and_display()">
+
+
 
                     <div class="h-50 p-3" id="data_display"></div>
+                    <label for="shoesize">What is your american shoe size?</label>
+                    <input type="number" id="shoesize" name="shoesize" min="1" max="30" value="12" onchange="calculate_and_display()">
+                    <div style="display:inline" id="height_entry_section">
+                      <br>
+                      <label for="height">How Tall Are you in inches?</label>
+                      <input type="number" id="height" name="height" min="1" max="150" value="73.5"  onchange="calculate_and_display()">
+                    </div>
+                    <div style="display:none" id="limb_entry_section">
+                      <br>
+                        <label for="armlen">How Long are your arms (inches armpit to palm)?</label>
+                        <input type="number" id="armlen" name="armlen" min="1" max="150" value="22.5"  onchange="calculate_and_display()">
+                      <br>
+                        <label for="trunklen">How Long are is your torso (inches butt to armpit)?</label>
+                        <input type="number" id="trunklen" name="trunklen" min="1" max="150" value="18.4"  onchange="calculate_and_display()">
+                      <br>
+                        <label for="upper_leg_len">How Long is your thigh (inches butt to knee)?</label>
+                        <input type="number" id="upper_leg_len" name="upper_leg_len" min="1" max="150" value="18.4"  onchange="calculate_and_display()">
+                      <br>
+                        <label for="lower_leg_len">How Long is your lower leg (inches knee to floor)?</label>
+                        <input type="number" id="lower_leg_len" name="lower_leg_len" min="1" max="150" value="22.5"  onchange="calculate_and_display()">
+
+                    </div>
                 </div>
             </div>
         </div>

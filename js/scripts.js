@@ -27,6 +27,25 @@ window.addEventListener('DOMContentLoaded', event => {
 
 var max_height;
 
+function data_toggle() {
+  let button = document.getElementById("dataToggle")
+  let h_section = document.getElementById("height_entry_section")
+  let l_section = document.getElementById("limb_entry_section")
+
+  if (button.innerHTML === 'Enter Height') {
+    button.innerHTML = 'Estimate Limb Lengths'
+    h_section.setAttribute('style', "display:inline")
+    l_section.setAttribute('style', "display:none")
+
+  }
+  else {
+    button.innerHTML = 'Enter Height'
+    h_section.setAttribute('style', "display:none")
+    l_section.setAttribute('style', "display:inline")
+  }
+
+}
+
 function printout(text) {
   let el = document.createElement('p')
   el.innerHTML = text
@@ -36,6 +55,7 @@ function printout(text) {
 }
 
 function calculate_and_display() {
+  let button = document.getElementById("dataToggle")
   let display_el = document.getElementById('data_display')
 
 
@@ -70,11 +90,32 @@ function calculate_and_display() {
   let leg_angle = Math.atan(barbell_y / (barbell_x-1)) / Math.PI * 180
   console.log('leg angle: ' +leg_angle.toString())
 
-  let lower_leg_len = height * .306122
-  let upper_leg_len = height * .244898
-  let trunk_len = height * .258503
-  let arm_len = height * .326531
-  let shoulders_neck_head_len = height * .190476
+  let lower_leg_len;
+  let upper_leg_len;
+  let trunk_len;
+  let arm_len;
+  let shoulders_neck_head_len;
+
+
+  if (button.innerHTML === 'Enter Height') {
+    lower_leg_len = parseFloat(document.getElementById('lower_leg_len').value)
+    upper_leg_len = parseFloat(document.getElementById('upper_leg_len').value)
+    trunk_len = parseFloat(document.getElementById('trunklen').value)
+    arm_len = parseFloat(document.getElementById('armlen').value)
+    shoulders_neck_head_len = parseFloat(trunk_len * .258503 / .190476)
+
+
+  }
+  else {
+    lower_leg_len = height * .306122
+    upper_leg_len = height * .244898
+    trunk_len = height * .258503
+    arm_len = height * .326531
+    shoulders_neck_head_len = height * .190476
+    console.log(lower_leg_len, upper_leg_len, trunk_len, arm_len)
+
+  }
+  console.log('testing', lower_leg_len, upper_leg_len, trunk_len, arm_len)
 
   let foot_y1 = 0
   let foot_x1 = 0
@@ -215,7 +256,7 @@ function draw_base(two) {
 function get_intersections(x0, y0, r0, x1, y1, r1) {
     // circle 1: (x0, y0), radius r0
     // circle 2: (x1, y1), radius r1
-    console.log(x0, y0, r0, x1, y1, r1)
+    console.log('registering', x0, y0, r0, x1, y1, r1)
     let d=Math.sqrt((x1-x0)**2 + (y1-y0)**2)
 
     // non intersecting
