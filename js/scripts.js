@@ -25,7 +25,7 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-var max_height;
+//var max_height;
 
 function data_toggle() {
   let button = document.getElementById("dataToggle")
@@ -57,6 +57,10 @@ function printout(text) {
 function calculate_and_display() {
   let button = document.getElementById("dataToggle")
   let display_el = document.getElementById('data_display')
+  let vitruvian_el = document.getElementById('vitruvian')
+  while (vitruvian_el.firstChild) {
+          vitruvian_el.removeChild(vitruvian_el.firstChild);
+        }
 
 
   while (display_el.firstChild) {
@@ -88,7 +92,6 @@ function calculate_and_display() {
 
   let barbell_x = midfoot_point - (full_foot_len - front_foot_size)
   let leg_angle = Math.atan(barbell_y / (barbell_x-1)) / Math.PI * 180
-  console.log('leg angle: ' +leg_angle.toString())
 
   let lower_leg_len;
   let upper_leg_len;
@@ -112,7 +115,6 @@ function calculate_and_display() {
     trunk_len = height * .258503
     arm_len = height * .326531
     shoulders_neck_head_len = height * .190476
-    console.log(lower_leg_len, upper_leg_len, trunk_len, arm_len)
 
   }
   console.log('testing', lower_leg_len, upper_leg_len, trunk_len, arm_len)
@@ -142,7 +144,6 @@ function calculate_and_display() {
   let intersection_coords = get_intersections(trunk_x2, trunk_y2, trunk_len,
                                               upper_leg_x1, upper_leg_y1, upper_leg_len)
 
-  console.log(intersection_coords)
   let upper_leg_x2 = intersection_coords[0]
   let upper_leg_y2 = intersection_coords[1]
 
@@ -160,51 +161,66 @@ function calculate_and_display() {
 
   two_el = setup_two('data_display')
   //draw_base(two_el)
-  console.log('cie')
-  draw_line(lower_leg_x1,lower_leg_y1,lower_leg_x2,lower_leg_y2, two_el)
-  draw_line(upper_leg_x1,upper_leg_y1,upper_leg_x2,upper_leg_y2, two_el)
-  draw_line(trunk_x1,trunk_y1,trunk_x2,trunk_y2, two_el)
-  draw_line(arm_x1,arm_y1,arm_x2,arm_y2, two_el)
-  draw_line(shoulders_neck_head_x1,shoulders_neck_head_y1,shoulders_neck_head_x2,shoulders_neck_head_y2, two_el)
-  draw_line(foot_x1,foot_y1,foot_x2,foot_y2, two_el)
 
-  draw_circle(barbell_x, barbell_y, barbell_diameter, two_el)
+  draw_line(lower_leg_x1,lower_leg_y1,lower_leg_x2,lower_leg_y2, two_el, max_height)
+  draw_line(upper_leg_x1,upper_leg_y1,upper_leg_x2,upper_leg_y2, two_el, max_height)
+  draw_line(trunk_x1,trunk_y1,trunk_x2,trunk_y2, two_el, max_height)
+  draw_line(arm_x1,arm_y1,arm_x2,arm_y2, two_el, max_height)
+  draw_line(shoulders_neck_head_x1,shoulders_neck_head_y1,shoulders_neck_head_x2,shoulders_neck_head_y2, two_el, max_height)
+  draw_line(foot_x1,foot_y1,foot_x2,foot_y2, two_el, max_height)
 
+  draw_circle(barbell_x, barbell_y, barbell_diameter, two_el, max_height)
+
+  two_vitruvian = setup_two('vitruvian')
+  max_height_v = height + 10
+  draw_vitruvian(lower_leg_len, upper_leg_len, trunk_len,
+                  arm_len, shoulders_neck_head_len,
+                  two_vitruvian, max_height_v)
 }
 
-function convert_y(inches, two) {
+function convert_y(inches, two, max_height) {
 
   canvas_y = (two.height - inches * two.height / max_height)
   return canvas_y
 }
 
-function convert_x(inches, two) {
+function convert_x(inches, two, max_height) {
 
   canvas_x = (inches + max_height/2) * two.height / max_height + (two.width - two.height)/2
   return canvas_x
 }
 
-function convert_diamater(inches, two) {
+function convert_diamater(inches, two, max_height) {
   d=inches / max_height * two.height
   return d
 }
 
-function draw_circle(x_in,y_in,d_in, two) {
+function draw_v_circle(x_in,y_in,d_in, two, max_height) {
 
-  x = convert_x(x_in, two)
-  y = convert_y(y_in, two)
-  d = convert_diamater(d_in, two)
+  x = convert_x(x_in, two, max_height)
+  y = convert_y(y_in, two, max_height)
+  d = convert_diamater(d_in, two, max_height)
+  var circle = two.makeCircle(x, y, d/2)
+  circle.fill = 'transparent'
+  two.update();
+}
+
+function draw_circle(x_in,y_in,d_in, two, max_height) {
+
+  x = convert_x(x_in, two, max_height)
+  y = convert_y(y_in, two, max_height)
+  d = convert_diamater(d_in, two, max_height)
   var circle = two.makeCircle(x, y, d/2)
   circle.fill = '#FF8000'
   two.update();
 }
 
-function draw_line(x0,y0,x1,y1, two) {
+function draw_line(x0,y0,x1,y1, two, max_height) {
 
-  line = two.makeLine(convert_x(x0, two),
-                      convert_y(y0, two),
-                      convert_x(x1, two),
-                      convert_y(y1, two))
+  line = two.makeLine(convert_x(x0, two, max_height),
+                      convert_y(y0, two, max_height),
+                      convert_x(x1, two, max_height),
+                      convert_y(y1, two, max_height))
 
   //printout('x1 ' +convert_x(x0, two).toString() + ' y1 ' + convert_y(y0, two).toString() + ' x2 '+
   //          convert_x(x1, two).toString() + ' y2 ' + convert_y(y1, two).toString())
@@ -219,35 +235,100 @@ function setup_two (parentEL){
   };
 
   var elem = document.getElementById(parentEL)
+  console.log(elem)
   var two_el = new Two(params).appendTo(elem);
-  console.log(two_el.width, two_el.height)
 
   return two_el
 }
 
-function draw_base(two) {
+function draw_vitruvian(lower_leg, upper_leg, torso, arm, head, two, max_height) {
 
-  // Two.js has convenient methods to make shapes and insert them into the scene.
-  var radius = 50;
-  var x = two.width * 0.5;
-  var y = two.height * 0.5 - radius * 1.25;
-  var circle = two.makeCircle(x, y, radius);
+  leg = lower_leg + upper_leg
+  leg_1_x1 = 2
+  leg_1_x2 = 2
+  leg_1_y1 = 0
+  leg_1_y2 = leg
+  draw_line(leg_1_x1,leg_1_y1,leg_1_x2,leg_1_y2, two, max_height)
 
-  y = two.height * 0.5 + radius * 1.25;
-  var width = 100;
-  var height = 100;
-  var rect = two.makeRectangle(x, y, width, height);
+  leg_2_x1 = -2
+  leg_2_x2 = -2
+  leg_2_y1 = 0
+  leg_2_y2 = leg
+  draw_line(leg_2_x1,leg_2_y1,leg_2_x2,leg_2_y2, two, max_height)
 
-  // The object returned has many stylable properties:
-  circle.fill = '#FF8000';
-  // And accepts all valid CSS color:
-  circle.stroke = 'orangered';
-  circle.linewidth = 5;
+  leg_3_angle = 296
+  leg_3_x1 = Math.cos(leg_3_angle*Math.PI/180)*leg
+  leg_3_x2 = 2
+  // adjusting for taking the angle from the endpoint instead of floor
+  leg_3_y1 = (Math.sin(leg_3_angle*Math.PI/180)+1)*leg
+  leg_3_y2 = leg
+  draw_line(leg_3_x1,leg_3_y1,leg_3_x2,leg_3_y2, two, max_height)
 
-  rect.fill = 'rgb(0, 200, 255)';
-  rect.opacity = 0.75;
-  rect.noStroke();
+  leg_4_angle = 244
+  leg_4_x1 = Math.cos(leg_4_angle*Math.PI/180)*leg
+  leg_4_x2 = -2
+  // adjusting for taking the angle from the endpoint instead of floor
+  leg_4_y1 = (Math.sin(leg_4_angle*Math.PI/180)+1)*leg
+  leg_4_y2 = leg
+  console.log(leg_4_y1, leg_4_y2)
+  draw_line(leg_4_x1,leg_4_y1,leg_4_x2,leg_4_y2, two, max_height)
 
+  leg_2_x1 = -2
+  leg_2_x2 = -2
+  leg_2_y1 = 0
+  leg_2_y2 = lower_leg + upper_leg
+  draw_line(leg_2_x1,leg_2_y1,leg_2_x2,leg_2_y2, two, max_height)
+
+  torso_x1 = 0
+  torso_x2 = 0
+  torso_y1 = lower_leg + upper_leg
+  torso_y2 = lower_leg + upper_leg + torso
+  draw_line(torso_x1,torso_y1,torso_x2,torso_y2, two, max_height)
+
+  arm_1_x1 = 2
+  arm_1_x2 = 2 + arm
+  arm_1_y1 = torso_y2
+  arm_1_y2 = torso_y2
+  draw_line(arm_1_x1,arm_1_y1,arm_1_x2,arm_1_y2, two, max_height)
+
+  arm_2_x1 = -2
+  arm_2_x2 = -2 - arm
+  arm_2_y1 = torso_y2
+  arm_2_y2 = torso_y2
+  draw_line(arm_2_x1,arm_2_y1,arm_2_x2,arm_2_y2, two, max_height)
+
+  arm_3_angle = 18
+  arm_3_x1 = 2
+  arm_3_x2 = Math.cos(arm_3_angle*Math.PI/180)*arm + arm_3_x1
+  arm_3_y1 = torso_y2
+  arm_3_y2 = Math.sin(arm_3_angle*Math.PI/180)*arm + arm_3_y1
+  draw_line(arm_3_x1,arm_3_y1,arm_3_x2,arm_3_y2, two, max_height)
+
+  arm_4_angle = 162
+  arm_4_x1 = -2
+  arm_4_x2 = Math.cos(arm_4_angle*Math.PI/180)*arm + arm_4_x1
+  arm_4_y1 = torso_y2
+  arm_4_y2 = Math.sin(arm_4_angle*Math.PI/180)*arm + arm_4_y1
+  draw_line(arm_4_x1,arm_4_y1,arm_4_x2,arm_4_y2, two, max_height)
+
+  head_x1 = 0
+  head_x2 = 0
+  head_y1=torso_y2
+  head_y2=torso_y2 + head
+  draw_line(head_x1,head_y1,head_x2,head_y2, two, max_height)
+
+  let x_array = [arm_1_x2,arm_2_x2,arm_3_x2,arm_4_x2,
+              leg_1_x1,leg_2_x1,leg_3_x1,leg_4_x1]
+
+  let y_array = [arm_1_y2,arm_2_y2,arm_3_y2,arm_4_y2,
+              leg_1_y1,leg_2_y1,leg_3_y1,leg_4_y1,
+                ]
+
+  const average = (array) => array.reduce((a, b) => a + b) / array.length;
+  av_x = 0
+  av_y = average(y_array)
+  console.log(av_x, av_y)
+  draw_v_circle(av_x,av_y+5,max_height, two, max_height)
   // Don’t forget to tell two to draw everything to the screen
   two.update();
 
@@ -256,7 +337,7 @@ function draw_base(two) {
 function get_intersections(x0, y0, r0, x1, y1, r1) {
     // circle 1: (x0, y0), radius r0
     // circle 2: (x1, y1), radius r1
-    console.log('registering', x0, y0, r0, x1, y1, r1)
+    //console.log('registering', x0, y0, r0, x1, y1, r1)
     let d=Math.sqrt((x1-x0)**2 + (y1-y0)**2)
 
     // non intersecting
@@ -281,13 +362,10 @@ function get_intersections(x0, y0, r0, x1, y1, r1) {
 
         let x4=x2-h*(y1-y0)/d
         let y4=y2+h*(x1-x0)/d
-        console.log('going in')
         if (x4 < x3){
-          console.log('x4')
           return [x4, y4]
         }
         else{
-          console.log('x3', x3, y3)
 
         return [x3, y3]
         }
