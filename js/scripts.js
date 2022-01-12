@@ -33,7 +33,7 @@ function data_toggle() {
   let l_section = document.getElementById("limb_entry_section")
 
   if (button.innerHTML === 'Enter Height') {
-    button.innerHTML = 'Estimate Limb Lengths'
+    button.innerHTML = 'Enter Limb Lengths'
     h_section.setAttribute('style', "display:inline")
     l_section.setAttribute('style', "display:none")
 
